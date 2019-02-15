@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 15, 2019 at 07:13 AM
+-- Generation Time: Feb 15, 2019 at 07:28 AM
 -- Server version: 10.1.32-MariaDB
 -- PHP Version: 7.2.5
 
@@ -21,6 +21,18 @@ SET time_zone = "+00:00";
 --
 -- Database: `docgen`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `persons`
+--
+
+CREATE TABLE `persons` (
+  `ID` int(11) NOT NULL,
+  `fullname` varchar(255) NOT NULL,
+  `Title` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -99,9 +111,34 @@ INSERT INTO `sow activities` (`Solution Stream`, `Solution`, `Activities`, `Deli
 ('ITSM', 'Supportworks', 'Asset Management Automation', 'Deployment of Policies to Unified Endpoint (Ivanti)', 8, 139),
 ('Security', 'Ivanti Patch fo Windows (Shavlik)', 'Quick Start', '\"Installation\r\nIntegration with Email and AD\r\nBasic Configuration\"', 2, 140);
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sow_list`
+--
+
+CREATE TABLE `sow_list` (
+  `ID` int(11) NOT NULL,
+  `OwnerID` varchar(255) NOT NULL,
+  `Dates` varchar(255) DEFAULT NULL,
+  `Version` double DEFAULT NULL,
+  `Address` varchar(255) DEFAULT NULL,
+  `tel` varchar(255) DEFAULT NULL,
+  `fax` varchar(255) DEFAULT NULL,
+  `web` varchar(255) DEFAULT NULL,
+  `recids` varchar(255) DEFAULT NULL,
+  `mandays` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `persons`
+--
+ALTER TABLE `persons`
+  ADD PRIMARY KEY (`ID`);
 
 --
 -- Indexes for table `sow activities`
@@ -110,14 +147,32 @@ ALTER TABLE `sow activities`
   ADD PRIMARY KEY (`RecID`);
 
 --
+-- Indexes for table `sow_list`
+--
+ALTER TABLE `sow_list`
+  ADD PRIMARY KEY (`ID`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `persons`
+--
+ALTER TABLE `persons`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `sow activities`
 --
 ALTER TABLE `sow activities`
   MODIFY `RecID` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=141;
+
+--
+-- AUTO_INCREMENT for table `sow_list`
+--
+ALTER TABLE `sow_list`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
