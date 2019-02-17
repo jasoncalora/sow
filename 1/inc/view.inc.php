@@ -32,8 +32,7 @@ class grid extends dbh{
 
     
     
- class getSS extends dbh{
-    
+ class getSS extends dbh{    
        public function getSSfunction() {
         $sql = "SELECT `Solution Stream` FROM docgen.`sow activities` group by `Solution Stream`  desc";
         $result = $this->connect()->query($sql);
@@ -43,8 +42,7 @@ class grid extends dbh{
             While ($row = $result->fetch_assoc()){
                 $data[] = $row;
             }
-            return $data;
-          
+            return $data;          
         }
          mysqli_close($conn);
     } 
