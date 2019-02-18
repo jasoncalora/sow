@@ -2,12 +2,8 @@
 require('fpdf.php');
 
 //var_dump($_POST);
-//$_POST[""];
+//$_POST["total"];
 //$_POST["recid"];
-$sitSHNames = explode(",",$_POST["sitSHNames"]);
-$sitSHDesigs = explode(",",$_POST["sitSHDesigs"]);
-$clientSHNames = explode(",",$_POST["clientSHNames"]);
-$clientSHDesigs = explode(",",$_POST["clientSHDesigs"]);
 class PDF extends FPDF
 {
 //function Header()
@@ -108,7 +104,7 @@ function Table2($header1,$data1,$header2,$data2,$coc)
     $this->Ln();
     $this->SetFont('Arial','',8);
     $this->SetX(25);
-    $this->MultiCell(160,3,$coc,0,'J');
+    $this->MultiCell(160,3,$coc,0,'');
     
 }
 function headerTable($x)
@@ -148,7 +144,7 @@ function headerTable($x)
     $this->SetFont('Arial','',14);
     $this->SetXY(68,15);
     $this->SetTextColor(145, 145, 145, 0.893);
-    $this->Cell(100,5,$_POST["recid"],0,'','C');
+    $this->Cell(100,5,"Bluestreak 2",0,'','C');
     $this->SetXY(68,25);
     $this->SetTextColor(145, 145, 145, 0.893);
     $this->Cell(100,5,"Statement of Work",0,'','C');
@@ -170,18 +166,21 @@ function reviewGroup($data)
     $this->Cell(60,7,"Title",1,'');
     
     $this->SetFont('Arial','',10,'');
-    $c = 67;
+    $this->Ln();
     foreach($data as $row)
     {
         $count = 1;
+                $testy = $this->getY();
         foreach($row as $col){
             if($count==1){
-                $this->SetXY(20,$c); $this->Cell(48,7,$col,1);$count+=1;
+                $testy = $this->getY();
+                $col1 = (strlen($col) > 24 ? (floor(strlen($col)/24)+1)*7 : 7);
+                $this->SetX(20); $this->MultiCell(48,7,$col.$col1." ".strlen($col),1);$count+=1;
             }else if($count==2){                
-                $this->SetXY(68,$c); $this->Cell(70,7,$col,1);$count+=1;
+                $this->SetXY(68,$testy); $this->MultiCell(70,$col1,$col,1);$count+=1;
             }else{
-                $this->SetXY(138,$c); $this->Cell(60,7,$col,1);$count+=1;                
-                $c += 7;
+                $this->SetXY(138,$testy); $this->MultiCell(60,$col1,$col,1);$count=1;         
+//                $this->Ln();
             }
 //            if($count==1){$this->SetXY(20,67); $this->Cell(20,5,$col,'T');}else if($count==2){$this->SetXY(68,67);$this->Cell(20,5,$col,'T');}else{ $this->SetXY(68,60);$this->Cell(60,5,$col,'T');}$c+=1;
 //            else if($c>14){if($count==1){$this->SetX(120); $this->Cell(20,5,$col,'B');}else{ $this->MultiCell(50,5,$col,'B');}$c+=1;}
@@ -270,8 +269,7 @@ function distroList(){
         $this->SetX(20);
         }
         
-} 
-    
+}
 }
 
 //$headers = array('recid','activities','deliverables','mandays');
@@ -279,48 +277,48 @@ function distroList(){
 //FORM DATA
 $companyinfo = array();
 $companyinfo[0][0] = "Company:";
-$companyinfo[0][1] = $_POST["company"];
+$companyinfo[0][1] = "ServiceIT+, Inc.";
 $companyinfo[1][0] = "Author:";
-$companyinfo[1][1] = $_POST["author"]; //------------AUTHOR
+$companyinfo[1][1] = "Benjamin Abadilla"; //------------AUTHOR
 $companyinfo[2][0] = "Date:";
-$companyinfo[2][1] = $_POST["date"]; //------------DATE?
+$companyinfo[2][1] = date("d F Y"); //------------DATE?
 $companyinfo[3][0] = "Version:";
-$companyinfo[3][1] = $_POST["version"]; //------------VERSION
+$companyinfo[3][1] = "1"; //------------VERSION
 $companyinfo[4][0] = "Address:";
-$companyinfo[4][1] = $_POST["address"];
+$companyinfo[4][1] = "Suite 604 VGP Center 6772, Ayala Avenue, Makati City, 1200 Philippines";
 $companyinfo[5][0] = "Tel:";
-$companyinfo[5][1] = $_POST["tel"];
+$companyinfo[5][1] = "+(632) 949 8109";
 $companyinfo[6][0] = "Fax:";
-$companyinfo[6][1] = $_POST["fax"];
+$companyinfo[6][1] = "+(632) 621 6323 loc 116";
 $companyinfo[7][0] = "Web:";
-$companyinfo[7][1] = $_POST["web"];
+$companyinfo[7][1] = "www.serviceitplus.com";
 
-$clients = array();
-foreach($clientSHNames as $col){
-    
-}
-$y = 0;
-for ($x = 0; $x < count($clientSHNames); $x++) {
-    $clients[$x][$y] = $clientSHNames[$x];
-    ($y == 0 ? $y=1 : $y=0);    
-    $clients[$x][$y] = $clientSHDesigs[$x];
-}
+$clients = array();             //  CLIENT STAKEHOLDERS ARRAY
+$clients[0][0] = "Joseph Din";
+$clients[0][1] = "IAM Ops Head";
+$clients[1][0] = "Pete Paulyn Penetrante";
+$clients[1][1] = "IAM Ops Senior Expert";
 
-$sit_peeps = array();
-$y = 0;
-for ($x = 0; $x < count($sitSHNames); $x++) {
-    $sit_peeps[$x][$y] = $sitSHNames[$x];
-    ($y == 0 ? $y=1 : $y=0);    
-    $sit_peeps[$x][$y] = $sitSHDesigs[$x];
-}
+$sit_peeps = array();           //SIT PROJECT TEAM ARRAY
+$sit_peeps[0][0] = "Benz Abadilla";
+$sit_peeps[0][1] = "Pre-sales Consultant";
+$sit_peeps[1][0] = "Jason Calora";
+$sit_peeps[1][1] = "Technical Consultant";
+$sit_peeps[2][0] = "Glicerio Catholico";
+$sit_peeps[2][1] = "Technical Consultant";
+$sit_peeps[3][0] = "Shadrach Gonzales";
+$sit_peeps[3][1] = "Project Manager";
+$sit_peeps[4][0] = "Alex Baltazar";
+$sit_peeps[4][1] = "Account Manager";
+
 $rev_group = array();
-$rev_group[0][0] = "Benz Abadilla";
+$rev_group[0][0] = "Benz Abadilla test asdasd asda sdasd ";
 $rev_group[0][1] = "ServiceIT+ Inc";
 $rev_group[0][2] = "Presales Consultant";
 $rev_group[1][0] = "Jason calora";
 $rev_group[1][1] = "ServiceIT+ Inc";
 $rev_group[1][2] = "Technical Consultant";
-$rev_group[3][0] = "Shadrach Gonzales";
+$rev_group[3][0] = "Shadrach Gonzalesssseses aasdadasdasdsdasdasd asdasdasdasd";
 $rev_group[3][1] = "ServiceIT+ Inc";
 $rev_group[3][2] = "Project Manager";
 $rev_group[4][0] = "Benz Abadilla";
@@ -333,11 +331,11 @@ $rev_group[5][2] = "Technical Consultant";
 $rev_history = array();
 $rev_history[0][1] = "1";
 $rev_history[0][2] = "25/01/2019";
-$rev_history[0][3] = "Jason calora";
+$rev_history[0][3] = "Jason calora asdasdasd asdasdasd";
 $rev_history[0][4] = "asdasdasdasd asdasdasd";
 $rev_history[1][1] = "1.1";
 $rev_history[1][2] = "31/01/2019";
-$rev_history[1][3] = "Markus Punzalan";
+$rev_history[1][3] = "Markus Punzalan asdasdas asdasdaasdasd";
 $rev_history[1][4] = "asdasdasdasd asdasdasd";
 $rev_history[2][1] = "1.2";
 $rev_history[2][2] = "09/02/2019";
@@ -347,6 +345,14 @@ $rev_history[2][4] = "asdasdasdasd asdasdasd";
 $coc = "The contents of this document are private and confidential and intended specifically for Globe Telecom, Inc. and ServiceIT+ Inc. (SIT+) No content from this document, in full or in part, shall be disclosed to any third party or individual without the prior explicit written consent of both parties.";
 $pdf = new PDF('P','mm','A4');
 //$pdf->AliasNbPages();
+$pdf->AddPage();
+$pdf->headerTable(2);
+$pdf->reviewGroup($rev_group);
+$pdf->revHistory($rev_history);
+$pdf->AddPage();
+$pdf->headerTable(3);
+$pdf->distroList();
+/////////////////////////   PAGE 1
 $pdf->AddPage();
 $pdf->Table1($companyinfo);
 $pdf->SetFont('Arial','',9);
@@ -362,24 +368,16 @@ $pdf->SetFont('Arial','',10);
 $pdf->SetX(110);
 $pdf->MultiCell(80,4,'All Trademarks are acknowledged to be the property of their respective owners','B');
 $pdf->SetFont('Arial','',25);
-$pdf->SetXY(10,150);
-$pdf->Cell(130,0,'Statement Of Work',0,'','R');
+$pdf->Cell(130,40,'Statement Of Work','','','R');
 $pdf->Image('images/logo.png',45,65,40,30);
-$pdf->Table2($_POST["client"],$clients,'ServiceIT+ Inc',$sit_peeps,$coc);
+$pdf->Table2('Globe Telecom',$clients,'ServiceIT+ Inc',$sit_peeps,$coc);
+/////////////////////////   PAGE 2
+
 //$pdf->Table1($table);
 //$pdf->Cell(150,50,'Statement Of Work','','','R');z
 //$pdf->AddPage();
 //$pdf->Table1($table);
-$pdf->AddPage();
-$pdf->headerTable(2);
-$pdf->reviewGroup($rev_group);
-$pdf->revHistory($rev_history);
-$pdf->AddPage();
-$pdf->headerTable(3);
-$pdf->distroList();
-$filename="test/".$_POST["filename"];;
-$pdf->Output($filename,'F');
-//$pdf->Output();
+$pdf->Output();
 //$title = 'SOW';
 //$pdf->SetTitle($title);
 //$recid = explode(',', $_POST["recid"]);

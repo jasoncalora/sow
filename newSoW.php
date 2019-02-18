@@ -8,10 +8,10 @@ include("inc/functions.php");
 <head>
     <title>Statement of Work Estmiator</title>
     <link rel="stylesheet" href="css/newSoW.css">
-    <link rel="stylesheet" href="css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script src="js/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="js/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <script defer src="js/fontawesome-all.js" integrity="sha384-0pzryjIRos8mFBWMzSSZApWtPl/5++eIfzYmTgBBmXYdhvxPc+XcFEk+zJwDgWbP" crossorigin="anonymous"></script>
 </head>
 <script>
@@ -79,17 +79,21 @@ include("inc/functions.php");
         checkboxes = document.querySelectorAll('input[name=checkbox]:checked');
         var recid = "";
         var mandays = "";
+        var activities = "";
         for (var i = 0, n = checkboxes.length; i < n; i++) {
             var x = document.getElementById(checkboxes[i].value).childNodes;
             if (recid == "" && mandays == "") {
                 recid = x[0].childNodes[0].value;
+                activities = x[1].textContent;
                 mandays = x[3].textContent;
             } else {
                 recid += "," + x[0].childNodes[0].value;
+                activities += "," + x[1].textContent;
                 mandays += "," + x[3].textContent;
             }
         }
         alert("recid's : "+recid);
+        alert("activities : "+activities);
         alert("mandays : "+mandays);
     }
     function toggle(source) {
@@ -98,23 +102,6 @@ include("inc/functions.php");
             checkboxes[i].checked = source.checked;
             //                alert(checkboxes[i].value);
         }
-    }
-    function showSelected(source) {
-        checkboxes = document.querySelectorAll('input[name=checkbox]:checked');
-        var recid = "";
-        var mandays = "";
-        for (var i = 0, n = checkboxes.length; i < n; i++) {
-            var x = document.getElementById(checkboxes[i].value).childNodes;
-            if (recid == "" && mandays == "") {
-                recid = x[0].childNodes[0].value;
-                mandays = x[3].textContent;
-            } else {
-                recid += "," + x[0].childNodes[0].value;
-                mandays += "," + x[3].textContent;
-            }
-        }
-        alert("recid's : "+recid);
-        alert("mandays : "+mandays);
     }
     function computeDays(source) {
         checkboxes = document.querySelectorAll('input[name=checkbox]:checked');
@@ -140,6 +127,7 @@ include("inc/functions.php");
                     tel:document.getElementById("txt_tel").value,
                     fax:document.getElementById("txt_fax").value,
                     web:document.getElementById("txt_web").value,
+                    project:document.getElementById("txt_project").value,
                     client:document.getElementById("txt_client").value};
         var obj = Object.getOwnPropertyNames(info);
         ///////     STAKEHOLDERS        
@@ -250,8 +238,8 @@ include("inc/functions.php");
     <div class="wrapperr">
         <div class="containerr">
             <div class="docu-details">
-                <div class="title">Document Details</div>
-                <div class="details-values">
+                <div class="title"><a href="#docudetails" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="docudetails">Document Details</a></div>
+                <div class="details-values collapse multi-collapse" id="docudetails">
                     <table>
                         <tr>
                             <td>Company</td>
@@ -275,64 +263,69 @@ include("inc/functions.php");
                             <td>Version</td>
                             <td><input type="number" id="txt_version" value="1"></td>
                             <td>Client Name</td>
-                            <td><input type="text" placeholder="client name" id="txt_client" value=""></td>
+                            <td><input type="text" placeholder="Client name" id="txt_client" value=""></td>
                         </tr>
                         <tr>
                             <td>Address</td>
                             <td><textarea id="txt_address" rows="2" cols="40">Suite 604 VGP Center 6772, Ayala Avenue, Makati City, 1200 Philippines</textarea></td>
+                            <td>Project Name</td>
+                            <td><input type="text" placeholder="Project Name" id="txt_project" value=""></td>
                         </tr>
                     </table>
                 </div>
-                <br><br>
-                <div class="title">StakeHolders</div>
-                <div class="SHContainer">
-                    <div class="added" id="sit_SHContainer">
-                        <table>
-                           <tr>
-                               <td colspan = 2>ServiceIT+ Steakholders</td>
-                           </tr>
-                            <tr>
-                                <th>Name</th>
-                                <th colspan=2>Designation</th>
-                            </tr>
-                            <tr><td colspan="3" align="center">No Entries Yet</td></tr>
-                        </table>
+<!--                <br><br>-->
+                <div class="title"><a href="#shcont" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="shcont">StakeHolders</a></div>
+                <div class="SHCont collapse multi-collapse" id="shcont">
+                    <div class="SHContainer">
+                        <div class="added" id="sit_SHContainer">
+                            <table>
+                               <tr>
+                                   <td colspan = 2>ServiceIT+ Steakholders</td>
+                               </tr>
+                                <tr>
+                                    <th>Name</th>
+                                    <th colspan=2>Designation</th>
+                                </tr>
+                                <tr><td colspan="3" align="center">No Entries Yet</td></tr>
+                            </table>
+                        </div>
+                        <div class="add-entry">
+                            <table>
+                                <tr>
+                                    <td><input type="text" class="txt_name" placeholder="Name"></td>
+                                    <td><input type="text" class="txt_desig" placeholder="Designation"></td>
+                                    <td><button onclick="addSH(0)">+</button></td>
+                                </tr>
+                            </table>
+                        </div>
                     </div>
-                    <div class="add-entry">
-                        <table>
-                            <tr>
-                                <td><input type="text" class="txt_name" placeholder="Name"></input></td>
-                                <td><input type="text" class="txt_desig" placeholder="Designation"></input></td>
-                                <td><button onclick="addSH(0)">+</button></td>
-                            </tr>
-                        </table>
-                    </div>
+                    <br><br>
+                    <div class="SHContainer">
+                        <div class="added" id="sit_SHContainer">
+                            <table>
+                               <tr>
+                                   <td colspan = 2>Client Steakholders</td>
+                               </tr>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Designation</th>
+                                </tr>
+                                <tr><td colspan="3" align="center">No Entries Yet</td></tr>
+                            </table>
+                        </div>
+                        <div class="add-entry">
+                            <table>
+                                <tr>
+                                    <td><input type="text" class="txt_name" placeholder="Name"></td>
+                                    <td><input type="text" class="txt_desig" placeholder="Designation"></td>
+                                    <td><button onclick="addSH(1)">+</button></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>  
                 </div>
-                <br><br>
-                <div class="SHContainer">
-                    <div class="added" id="sit_SHContainer">
-                        <table>
-                           <tr>
-                               <td colspan = 2>Client Steakholders</td>
-                           </tr>
-                            <tr>
-                                <th>Name</th>
-                                <th>Designation</th>
-                            </tr>
-                            <tr><td colspan="3" align="center">No Entries Yet</td></tr>
-                        </table>
-                    </div>
-                    <div class="add-entry">
-                        <table>
-                            <tr>
-                                <td><input type="text" class="txt_name" placeholder="Name"></input></td>
-                                <td><input type="text" class="txt_desig" placeholder="Designation"></input></td>
-                                <td><button onclick="addSH(1)">+</button></td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
-                <br><br>
+                
+                
                 <div class="title">Activities</div>
                 <div class="activities-container">
                     <table id="table1">
@@ -374,7 +367,7 @@ include("inc/functions.php");
             </div>
             <div class="buttons">
                    <button class="btn btn-success" onclick="preview()">Preview</button>
-                    <button class="btn btn-primary" onclick="test()">Save</button>
+                    <button class="btn btn-primary" onclick="showSelected(this)">Save</button>
             </div>
         </div>
     </div>
